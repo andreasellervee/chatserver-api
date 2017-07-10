@@ -8,6 +8,18 @@ Basic chat service implementation with REST-api
 - Ability to notify sender when receiver read particular message
 - No client authentication/authorization needed
 
+## How to run?
+
+* Clone the repository
+* Run ```./gradlew runjar```
+
+## WebSockets
+
+* WebSocket server endpoint ```/chatserver-websocket```
+* Users can subscribe to:
+    * Receive messages - ```/user/<username>/message```
+    * Receive notifications - ```/user/<username>/notification```
+
 ## User
 
 ### Create new user
@@ -17,9 +29,10 @@ Basic chat service implementation with REST-api
   
 * Payload
   
-  sender: string - required
-  
-  ```sender```
+  * sender: string - required
+  ```
+  sender
+  ```
   
 * Success response
 
@@ -35,7 +48,7 @@ Basic chat service implementation with REST-api
 * Error response
 
   * **CODE**: 400
-  * **Content**:
+  * **Content**: User with such name already exists
   ```
   {
       "timestamp": 1499625878987,
@@ -56,9 +69,9 @@ Basic chat service implementation with REST-api
   
 * Payload
 
-  from: string - required
-  to: string - required
-  data: string - required
+  * from: string - required
+  * to: string - required
+  * data: string - required
 
   ```
   {
@@ -67,10 +80,13 @@ Basic chat service implementation with REST-api
     "data": "Your message"
   }
   ```
-  
+
+* On Success
+  * Message is pushed to ```/user/receiver/message```
+
 * Success response
   * **CODE**: 200
-  * *Content*:
+  * **Content**:
   ```
   {
     "id": 1,
@@ -90,7 +106,7 @@ Basic chat service implementation with REST-api
   
 * Error response
   * **CODE**: 400
-  * *Content*:
+  * **Content**: Invalid Sender / Receiver
   ```
   {
       "timestamp": 1499638742392,
@@ -109,18 +125,24 @@ Basic chat service implementation with REST-api
   
 * Request parameters
 
-  id: long - required (Message ID)
-  status: MessageStatus - required (Message Status)
-  * RECEIVED - Receiver's client has recieved the message
-  * SEEN - Receiver has seen the message
+  * id: long - required (Message ID)
+  * status: MessageStatus - required (Message Status)
+    * **RECEIVED** - Receiver's client has recieved the message
+    * **SEEN** - Receiver has seen the message
+  
+* On Success
+  * Message status change is pushed to ```/user/sender/notification```
   
 * Success response
   * **CODE**: 200
-  * *Content*: ```ACCEPTED```
+  * **Content**: 
+  ```
+  ACCEPTED
+  ```
   
 * Error response
   * **CODE**: 400
-  * *Content*:
+  * **Content**: Message status change not allowed 
   ```
   {
       "timestamp": 1499639058269,
@@ -139,12 +161,12 @@ Basic chat service implementation with REST-api
   
 * Request parameters
 
-  from: string - required
-  to: string - required
+  * from: string - required
+  * to: string - required
   
 * Success response
   * **CODE**: 200
-  * *Content*: 
+  * **Content**: 
   ```
   [
       {
@@ -166,7 +188,7 @@ Basic chat service implementation with REST-api
   
 * Error response
   * **CODE**: 400
-  * *Content*:
+  * **Content**: Invalid Sender / Receiver
   ```
   {
       "timestamp": 1499639335044,
@@ -185,12 +207,12 @@ Basic chat service implementation with REST-api
   
 * Request parameters
 
-  from: string - required
-  to: string - required
+  * from: string - required
+  * to: string - required
   
 * Success response
   * **CODE**: 200
-  * *Content*: 
+  * **Content**: 
   ```
   [
       {
@@ -226,7 +248,7 @@ Basic chat service implementation with REST-api
   
 * Error response
   * **CODE**: 400
-  * *Content*:
+  * **Content**: Invalid Sender / Receiver
   ```
   {
       "timestamp": 1499639335044,
