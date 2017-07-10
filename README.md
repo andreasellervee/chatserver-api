@@ -11,7 +11,9 @@ Basic chat service implementation with REST-api
 ## How to run?
 
 * Clone the repository
-* Run ```./gradlew runjar```
+* Run ```./gradlew bootRun```
+* Access DB through ```/console```
+    * JDBC URL - jdbc:h2:mem:testdb
 
 ## WebSockets
 
